@@ -184,10 +184,12 @@ public class Snake extends JPanel {
 						return;
 					}
 					try {
-						if (boost)
-							sleep(espera / 10);
-						else
-							sleep(espera);
+						int div = 10;
+						while (div-- != 0)
+							if (boost)
+								sleep(espera / 100);
+							else
+								sleep(espera / 10);
 					} catch (Exception e) {
 						System.out.println("Error en Wait");
 					}
