@@ -30,7 +30,7 @@ public class Snake extends JPanel {
 	private int esperaIni;
 	private int initSize;
 	private double dificultad;
-	private boolean boost = false;
+	private int boost = 10;
 	private int modo;
 
 	public Snake(int dificultad, int cantCeldas, int tamCelda, int initSize, int modo, JFrame frame) {
@@ -51,7 +51,7 @@ public class Snake extends JPanel {
 		this.ventana.setSize(this.tam + deface, this.tam + 23 + deface); // con 20x15 funciona
 
 		this.celdas = cantCeldas;
-		boost = false;
+		boost = 10;
 		this.modo = modo;
 //		paintComponent(this.getGraphics());
 	}
@@ -186,10 +186,7 @@ public class Snake extends JPanel {
 					try {
 						int div = 10;
 						while (div-- != 0)
-							if (boost)
-								sleep(espera / 100);
-							else
-								sleep(espera / 10);
+							sleep(espera / boost);
 					} catch (Exception e) {
 						System.out.println("Error en Wait");
 					}
@@ -208,7 +205,7 @@ public class Snake extends JPanel {
 		sentido = new Point(1, 0);
 
 		this.espera = this.esperaIni;
-		boost = false;
+		boost = 10;
 		jugar();
 	}
 
@@ -246,7 +243,14 @@ public class Snake extends JPanel {
 						sentido = new Point(1, 0);
 					break;
 				case KeyEvent.VK_SPACE:
-					boost = true;
+					if (!arg0.isShiftDown())
+						boost = 100;
+					else
+						boost = 300;
+					break;
+				case KeyEvent.VK_SHIFT:
+					if (boost == 100)
+						boost = 300;
 					break;
 				}
 			}
@@ -254,7 +258,10 @@ public class Snake extends JPanel {
 			@Override
 			public void keyReleased(KeyEvent arg0) {
 				if (arg0.getKeyCode() == KeyEvent.VK_SPACE)
-					boost = false;
+					boost = 10;
+				else if (arg0.getKeyCode() == KeyEvent.VK_SHIFT && boost == 300) {
+					boost = 100;
+				}
 			}
 		};
 	}
